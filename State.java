@@ -18,6 +18,9 @@ public class State {
 
     private int[] board = { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 }; // position 1-12
 
+    /**
+     * Konstruktor standardmäßig
+     */
     public State() {
         this.myPoints = 0;
         this.oppPoints = 0;
@@ -27,12 +30,32 @@ public class State {
         this.action = -1;
     }
 
+    /**
+     * copy constructor
+     * 
+     * @param s state instance to copy
+     */
+    public State(State s) {
+        this.board = Arrays.copyOf(s.board, 12);
+        this.myPoints = s.myPoints;
+        this.oppPoints = s.oppPoints;
+    }
+
+    /**
+     * Bewertungsfunktion für minmax, wenn man an einem blattknoten, das durch Tiefe
+     * erreicht wurde. es wird über punktevergleich ausgewertet
+     * 
+     * @return
+     */
     public int maxEvalFunction() {
 
         if (this.myPoints > 36) {
             return Integer.MAX_VALUE;
         } else if (this.oppPoints > 36) {
             return Integer.MIN_VALUE;
+        }
+        if (this.myPoints == this.oppPoints && this.myPoints == 36) {
+            return 0;
         }
 
         return this.myPoints - this.oppPoints;
@@ -64,6 +87,10 @@ public class State {
         return res;
     }
 
+    /**
+     * equals methode so überschrieben, dass zwei zustände über punkte und spielfeld
+     * verglichen werden.
+     */
     @Override
     public boolean equals(Object o) {
 
@@ -77,6 +104,10 @@ public class State {
 
         State param = (State) o;
 
+        if (this.oppPoints != param.oppPoints || this.myPoints != param.myPoints) {
+            return false;
+        }
+
         for (int i = 0; i < this.board.length; i++) {
 
             if (this.board[i] != param.board[i]) {
@@ -89,6 +120,13 @@ public class State {
 
     }
 
+    /**
+     * kopiert von Dozenze Christian, elegant
+     * 
+     * @param copy
+     * @param field
+     * @return
+     */
     public static State action(State copy, int field) {
 
         State s = new State(copy);
@@ -120,24 +158,32 @@ public class State {
     }
 
     /**
-     * copy constructor
+     * ob man gerade an einem max oder min Knoten ist.
      * 
-     * @param s state instance to copy
+     * @return
      */
-    public State(State s) {
-        this.board = Arrays.copyOf(s.board, 12);
-        this.myPoints = s.myPoints;
-        this.oppPoints = s.oppPoints;
-    }
-
     public boolean maximizingPlayer() {
         return this.myTurn;
     }
 
+    /**
+     * checkt ob ein game zu ende ist
+     * 
+     * @return
+     */
+    public boolean gameEnd() {
+
+        return this.possiblePlays().size() == 0;
+
+    }
+
+    /**
+     * gibt zustand aus mit Punktzahl und
+     */
     public void printState() {
 
-        System.out.println("Punktzahl Maximierer : " + this.myPoints);
-        System.out.println("Punktzahl Minimierer : " + this.oppPoints);
+        System.out.println("Punktzahl KI ( max )\b\b: " + this.myPoints);
+        System.out.println("Punktzahl Gegner( min)\b   : " + this.oppPoints);
 
         System.out.println("Spielfeld sieht so aus ");
 
@@ -155,52 +201,53 @@ public class State {
 
     }
 
+    /**
+     * setter für die Kinderknoten
+     * 
+     * @param children
+     */
     public void setChildren(LinkedList<State> children) {
         this.children = children;
     }
 
+    /**
+     * setter für den value und gibt ihn zurück
+     * 
+     * @param val
+     * @return
+     */
     public int setVal(int val) {
         this.val = val;
         return val;
     }
 
+    /**
+     * Getter für die KinderKnoten
+     * 
+     * @return
+     */
     public List<State> getChildren() {
         return this.children;
     }
 
+    /**
+     * Getter für den Value
+     */
     public int getVal() {
         return this.val;
     }
 
+    /**
+     * Getter für die Actin ,die dazu hingeführt hat
+     * 
+     * @return
+     */
     public int getAction() {
         return this.action;
     }
 
-    public boolean gameEnd() {
-        boolean nullen = true;
-        ;
-        for (int i = 11; i > 5; i--) {
-            if (this.board[i] != 0) {
-                nullen = false;
-                break;
-            }
-        }
-
-        if (nullen) {
-            return true;
-        }
-
-        nullen = true;
-
-        for (int i = 0; i < 6; i++) {
-            if (this.board[i] != 0) {
-                nullen = false;
-                break;
-            }
-        }
-
-        return nullen;
-
+    public boolean getMax() {
+        return this.myTurn;
     }
 
 }

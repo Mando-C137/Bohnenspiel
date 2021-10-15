@@ -2,11 +2,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Minmax {
 
+    /**
+     * MinMaxBaumTiefe
+     */
     static int FAVOURED_DEPTH = 6;
 
     private static int minimax(State node, int depth, boolean maximizingPlayer) {
@@ -20,27 +22,24 @@ public class Minmax {
 
         node.setChildren(children);
 
-        // for (State b : children) {
-        // b.printState();
-        // }
-
         if (depth == FAVOURED_DEPTH || children.isEmpty()) {
             if (children.isEmpty())
                 System.out.println("emptylist");
             return node.setVal(node.maxEvalFunction());
+
         }
 
         if (node.maximizingPlayer()) {
             value = Integer.MIN_VALUE;
-            for (State state : children) {
-                value = Math.max(value, minimax(state, depth + 1, false));
+            for (State state : children) { // false
+                value = Math.max(value, minimax(state, depth + 1, state.getMax()));
             }
 
             return node.setVal(value);
         } else { // (* minimizing player *)
             value = Integer.MAX_VALUE;
-            for (State state : children) {
-                value = Math.min(value, minimax(state, depth + 1, true));
+            for (State state : children) { // true
+                value = Math.min(value, minimax(state, depth + 1, state.getMax()));
             }
 
             return node.setVal(value);
