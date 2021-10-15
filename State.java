@@ -4,7 +4,11 @@ import java.util.List;
 
 public class State {
 
-    public int minMaxVal;
+    private LinkedList<State> children;
+
+    private int action;
+
+    private int val;
 
     private int myPoints;
 
@@ -17,16 +21,21 @@ public class State {
     public State() {
         this.myPoints = 0;
         this.oppPoints = 0;
-        this.myTurn = true; // ??;
+        this.myTurn = true;
+        this.children = null;
+        this.val = 0;
+        this.action = -1;
     }
 
     public int maxEvalFunction() {
 
         if (this.myPoints > 36) {
             return Integer.MAX_VALUE;
-        } else
+        } else if (this.oppPoints > 36) {
+            return Integer.MIN_VALUE;
+        }
 
-            return this.myPoints - this.oppPoints;
+        return this.myPoints - this.oppPoints;
     }
 
     /**
@@ -80,10 +89,11 @@ public class State {
 
     }
 
-    public static State action(int field, State copy) {
+    public static State action(State copy, int field) {
 
         State s = new State(copy);
-
+        s.myTurn = !copy.myTurn;
+        s.action = field;
         int startField = field;
 
         int value = s.board[field];
@@ -109,11 +119,15 @@ public class State {
         return s;
     }
 
+    /**
+     * copy constructor
+     * 
+     * @param s state instance to copy
+     */
     public State(State s) {
         this.board = Arrays.copyOf(s.board, 12);
         this.myPoints = s.myPoints;
         this.oppPoints = s.oppPoints;
-        this.myTurn = s.myTurn;
     }
 
     public boolean maximizingPlayer() {
@@ -127,14 +141,66 @@ public class State {
 
         System.out.println("Spielfeld sieht so aus ");
 
-        for (int i = 0; i < 12; i++) {
-            System.out.print(" " + this.board[i] + " ");
-            if (i == 5) {
-                System.out.println();
-            }
+        for (int i = 0; i < 6; i++) {
+            System.out.print(" " + this.board[11 - i] + " ");
         }
 
         System.out.println();
+
+        for (int i = 0; i < 6; i++) {
+            System.out.print(" " + this.board[i] + " ");
+        }
+
+        System.out.println();
+
+    }
+
+    public void setChildren(LinkedList<State> children) {
+        this.children = children;
+    }
+
+    public int setVal(int val) {
+        this.val = val;
+        return val;
+    }
+
+    public List<State> getChildren() {
+        return this.children;
+    }
+
+    public int getVal() {
+        return this.val;
+    }
+
+    public int getAction() {
+        return this.action;
+    }
+
+    public boolean gameEnd() {
+        boolean nullen = true;
+        ;
+        for (int i = 11; i > 5; i--) {
+            if (this.board[i] != 0) {
+                nullen = false;
+                break;
+            }
+        }
+
+        if (nullen) {
+            return true;
+        }
+
+        nullen = true;
+
+        for (int i = 0; i < 6; i++) {
+            if (this.board[i] != 0) {
+                nullen = false;
+                break;
+            }
+        }
+
+        return nullen;
+
     }
 
 }
