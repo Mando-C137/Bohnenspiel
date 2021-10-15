@@ -121,7 +121,7 @@ public class State {
     }
 
     /**
-     * kopiert von Dozenze Christian, elegant
+     * kopiert von Dozent Christian, elegant
      * 
      * @param copy
      * @param field
