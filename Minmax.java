@@ -10,7 +10,7 @@ public class Minmax {
     /**
      * MinMaxBaumTiefe
      */
-    static int FAVOURED_DEPTH = 6;
+    static int FAVOURED_DEPTH = 7;
 
     private static int minimax(State node, int depth) {
 
