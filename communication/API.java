@@ -1,20 +1,24 @@
+package communication;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
 
+import domain.Minmax;
+import domain.State;
+
 public class API {
     // static String server = "http://127.0.0.1:5000";
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Rick";
+    static String name = "mirko";
 
     static State state;
-
     static boolean MyCreation;
 
     public static void main(String[] args) throws Exception {
         // System.out.println(load(server));
-        createGame();
-        // joinGame("202");
+        // createGame();
+        joinGame("216");
     }
 
     static void createGame() throws Exception {
