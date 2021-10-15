@@ -21,10 +21,10 @@ public class State {
     /**
      * Konstruktor standardmäßig
      */
-    public State() {
+    public State(boolean MyCreation) {
         this.myPoints = 0;
         this.oppPoints = 0;
-        this.myTurn = true;
+        this.myTurn = MyCreation;
         this.children = null;
         this.val = 0;
         this.action = -1;

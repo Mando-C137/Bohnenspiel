@@ -5,16 +5,16 @@ import java.net.URI;
 public class API {
     // static String server = "http://127.0.0.1:5000";
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "random-AI";
+    static String name = "Rick";
 
-    static int p1 = 0;
-    static int p2 = 0;
+    static State state;
+
+    static boolean MyCreation;
 
     public static void main(String[] args) throws Exception {
         // System.out.println(load(server));
         createGame();
-        // openGames();
-        // joinGame("0");
+        // joinGame("202");
     }
 
     static void createGame() throws Exception {
@@ -34,15 +34,7 @@ public class API {
                 return;
             }
         }
-        play(gameID, 0);
-    }
-
-    static void openGames() throws Exception {
-        String url = server + "/api/opengames";
-        String[] opengames = load(url).split(";");
-        for (int i = 0; i < opengames.length; i++) {
-            System.out.println(opengames[i]);
-        }
+        play(gameID);
     }
 
     static void joinGame(String gameID) throws Exception {
@@ -50,19 +42,20 @@ public class API {
         String state = load(url);
         System.out.println("Join-Game-State: " + state);
         if (state.equals("1")) {
-            play(gameID, 6);
+            MyCreation = false;
+            play(gameID);
         } else if (state.equals("0")) {
             System.out.println("error (join game)");
         }
     }
 
-    static void play(String gameID, int offset) throws Exception {
+    static void play(String gameID) throws Exception {
         String checkURL = server + "/api/check/" + gameID + "/" + name;
         String statesMsgURL = server + "/api/statemsg/" + gameID;
         String stateIdURL = server + "/api/state/" + gameID;
-        int[] board = { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 }; // position 1-12
+        state = new State(!MyCreation);
         int start, end;
-        if (offset == 0) {
+        if (!MyCreation) {
             start = 7;
             end = 12;
         } else {
@@ -71,27 +64,30 @@ public class API {
         }
 
         while (true) {
+            System.out.println();
             Thread.sleep(1000);
             int moveState = Integer.parseInt(load(checkURL));
             int stateID = Integer.parseInt(load(stateIdURL));
             if (stateID != 2 && ((start <= moveState && moveState <= end) || moveState == -1)) {
                 if (moveState != -1) {
                     int selectedField = moveState - 1;
-                    board = updateBoard(board, selectedField);
-                    System.out.println("Gegner wï¿½hlte: " + moveState + " /\t" + p1 + " - " + p2);
-                    System.out.println(printBoard(board) + "\n");
+                    state = State.action(state, selectedField);
+                    System.out.println("Gegner waehlte: " + moveState);
+                    state.printState();
                 }
                 // calculate fieldID
-                int selectField;
-                // System.out.println("Finde Zahl: ");
-                do {
-                    selectField = (int) (Math.random() * 6) + offset;
-                    // System.out.println("\t-> " + selectField );
-                } while (board[selectField] == 0);
+                int selectField = 0;
+                int bestOption = Minmax.minimax(state, 0);
+                for (int i = 0; i < state.getChildren().size(); i++) {
+                    if (state.getChildren().get(i).getVal() == bestOption) {
+                        selectField = state.getChildren().get(i).getAction();
+                        System.out.println("KI spielt Mulde nummer " + (state.getChildren().get(i).getAction() + 1));
+                        state = State.action(state, state.getChildren().get(i).getAction());
+                        break;
+                    }
+                }
 
-                board = updateBoard(board, selectField);
-                System.out.println("Wï¿½hle Feld: " + (selectField + 1) + " /\t" + p1 + " - " + p2);
-                System.out.println(printBoard(board) + "\n\n");
+                state.printState();
 
                 move(gameID, selectField + 1);
             } else if (moveState == -2 || stateID == 2) {
@@ -104,53 +100,6 @@ public class API {
             }
 
         }
-    }
-
-    static int[] updateBoard(int[] board, int field) {
-        int startField = field;
-
-        int value = board[field];
-        board[field] = 0;
-        while (value > 0) {
-            field = (++field) % 12;
-            board[field]++;
-            value--;
-        }
-
-        if (board[field] == 2 || board[field] == 4 || board[field] == 6) {
-            do {
-                if (startField < 6) {
-                    p1 += board[field];
-                } else {
-                    p2 += board[field];
-                }
-                board[field] = 0;
-                field = (field == 0) ? field = 11 : --field;
-            } while (board[field] == 2 || board[field] == 4 || board[field] == 6);
-        }
-        return board;
-    }
-
-    static String printBoard(int[] board) {
-        String s = "";
-        for (int i = 11; i >= 6; i--) {
-            if (i != 6) {
-                s += board[i] + "; ";
-            } else {
-                s += board[i];
-            }
-        }
-
-        s += "\n";
-        for (int i = 0; i <= 5; i++) {
-            if (i != 5) {
-                s += board[i] + "; ";
-            } else {
-                s += board[i];
-            }
-        }
-
-        return s;
     }
 
     static void move(String gameID, int fieldID) throws Exception {

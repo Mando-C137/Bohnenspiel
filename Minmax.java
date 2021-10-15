@@ -12,7 +12,7 @@ public class Minmax {
      */
     static int FAVOURED_DEPTH = 7;
 
-    private static int minimax(State node, int depth) {
+    public static int minimax(State node, int depth) {
 
         int value = -1;
 
@@ -33,7 +33,6 @@ public class Minmax {
             } else {
                 return node.setVal(node.maxEvalFunction());
             }
-
         }
 
         // wenn man an einem max knoten ist
@@ -58,7 +57,7 @@ public class Minmax {
     }
 
     public static void main(String[] args) {
-        State root = new State();
+        State root = new State(true);
         root.printState();
 
         int bestOption = minimax(root, 0);
@@ -91,6 +90,7 @@ public class Minmax {
             root.printState();
 
             waitforInput();
+
             bestOption = minimax(root, 0);
 
         }
