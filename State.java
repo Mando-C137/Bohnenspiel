@@ -173,7 +173,9 @@ public class State {
      */
     public boolean gameEnd() {
 
-        return this.possiblePlays().size() == 0;
+        boolean preEnd = this.myPoints > 36 || this.oppPoints > 36;
+
+        return this.possiblePlays().size() == 0 || preEnd;
 
     }
 
@@ -182,8 +184,8 @@ public class State {
      */
     public void printState() {
 
-        System.out.println("Punktzahl KI ( max )\b\b: " + this.myPoints);
-        System.out.println("Punktzahl Gegner( min)\b   : " + this.oppPoints);
+        System.out.println("Punktzahl KI ( max )    : " + this.myPoints);
+        System.out.println("Punktzahl Gegner( min ) : " + this.oppPoints);
 
         System.out.println("Spielfeld sieht so aus ");
 
@@ -248,6 +250,12 @@ public class State {
 
     public boolean getMax() {
         return this.myTurn;
+    }
+
+    public void printEnd() {
+
+        System.out
+                .println("KI hat" + this.myPoints + " Punkte und Gegner hat " + this.oppPoints + " Punkte.\nChapeau\n");
     }
 
 }
