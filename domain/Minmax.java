@@ -17,6 +17,14 @@ public class Minmax {
 
         int value = -1;
 
+        // wenn man an einem blattknoten ist oder das spiel fertig ist
+        // base case
+        if (depth == FAVOURED_DEPTH || node.gameEnd()) {
+
+            return node.setVal(node.maxEvalFunction());
+
+        }
+
         // mögliche plays rausfinden und die daraus resultierenden zustände speichern
         LinkedList<State> children = new LinkedList<State>();
         for (int action : node.possiblePlays()) {
@@ -25,16 +33,6 @@ public class Minmax {
 
         // die zustände als kinder speichern
         node.setChildren(children);
-
-        // wenn man an einem blattknoten ist oder das spiel fertig ist
-        // base case
-        if (depth == FAVOURED_DEPTH || node.gameEnd()) {
-            if (children.isEmpty()) {
-                return node.setVal(node.maxEvalFunction());
-            } else {
-                return node.setVal(node.maxEvalFunction());
-            }
-        }
 
         // wenn man an einem max knoten ist
         if (node.maximizingPlayer()) {
@@ -68,6 +66,8 @@ public class Minmax {
             System.out.println("\n-----------------------\n");
 
             for (int i = 0; i < root.getChildren().size(); i++) {
+                root.printPunkte();
+                System.out.println("bestoption = " + bestOption);
                 if (root.getChildren().get(i).getVal() == bestOption) {
                     System.out.println("Ki spielt Mulde nummer " + (root.getChildren().get(i).getAction() + 1));
                     root = State.action(root, root.getChildren().get(i).getAction());

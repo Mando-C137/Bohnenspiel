@@ -104,6 +104,7 @@ public class Game {
                 int selectField = -1;
                 int bestOption = Minmax.minimax(state, 0);
                 for (int i = 0; i < state.getChildren().size(); i++) {
+                    state.printPunkte();
                     if (state.getChildren().get(i).getVal() == bestOption) {
                         selectField = state.getChildren().get(i).getAction();
                         System.out.println("KI spielt Mulde nummer " + (state.getChildren().get(i).getAction() + 1));

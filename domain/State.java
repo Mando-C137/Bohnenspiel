@@ -268,4 +268,16 @@ public class State {
         return 1;
     }
 
+    public void printPunkte() {
+
+        if (this.oppPoints == 40) {
+            System.out.println("Mein val  = " + this.val);
+
+            for (State s : children) {
+                System.out.println("Kind  = " + s.val);
+            }
+
+        }
+    }
+
 }
