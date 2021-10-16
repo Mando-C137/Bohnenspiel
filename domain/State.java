@@ -27,7 +27,7 @@ public class State {
         this.myPoints = 0;
         this.oppPoints = 0;
         this.myTurn = MyCreation;
-        this.children = null;
+        this.children = new LinkedList<State>();
         this.val = 0;
         this.action = -1;
     }
@@ -41,6 +41,7 @@ public class State {
         this.board = Arrays.copyOf(s.board, 12);
         this.myPoints = s.myPoints;
         this.oppPoints = s.oppPoints;
+        this.children = new LinkedList<State>();
     }
 
     /**
@@ -51,14 +52,14 @@ public class State {
      */
     public int maxEvalFunction() {
 
-        // if (this.myPoints > 36) {
-        // return Integer.MAX_VALUE;
-        // } else if (this.oppPoints > 36) {
-        // return Integer.MIN_VALUE;
-        // }
-        // if (this.myPoints == this.oppPoints && this.myPoints == 36) {
-        // return 0;
-        // }
+        if (this.myPoints > 36) {
+            return Integer.MAX_VALUE;
+        } else if (this.oppPoints > 36) {
+            return Integer.MIN_VALUE;
+        }
+        if (this.myPoints == this.oppPoints && this.myPoints == 36) {
+            return 0;
+        }
 
         return this.myPoints - this.oppPoints;
     }
@@ -175,9 +176,7 @@ public class State {
      */
     public boolean gameEnd() {
 
-        boolean preEnd = this.myPoints > 36 || this.oppPoints > 36;
-
-        return this.possiblePlays().size() == 0 || preEnd;
+        return this.possiblePlays().size() == 0;
 
     }
 
@@ -250,10 +249,6 @@ public class State {
         return this.action;
     }
 
-    public boolean getMax() {
-        return this.myTurn;
-    }
-
     public void printEnd() {
 
         System.out
@@ -266,18 +261,6 @@ public class State {
         }
 
         return 1;
-    }
-
-    public void printPunkte() {
-
-        if (this.oppPoints == 40) {
-            System.out.println("Mein val  = " + this.val);
-
-            for (State s : children) {
-                System.out.println("Kind  = " + s.val);
-            }
-
-        }
     }
 
 }

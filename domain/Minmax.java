@@ -11,9 +11,9 @@ public class Minmax {
     /**
      * MinMaxBaumTiefe
      */
-    static int FAVOURED_DEPTH = 4;
+    static int FAVOURED_DEPTH = 8;
 
-    public static int minimax(State node, int depth) {
+    public static int minimax(State node, int depth, boolean max) {
 
         int value = -1;
 
@@ -35,10 +35,10 @@ public class Minmax {
         node.setChildren(children);
 
         // wenn man an einem max knoten ist
-        if (node.maximizingPlayer()) {
+        if (!max) {
             value = Integer.MIN_VALUE;
             for (State state : children) { // false
-                value = Math.max(value, minimax(state, depth + 1));
+                value = Math.max(value, minimax(state, depth + 1, !max));
             }
 
             return node.setVal(value);
@@ -47,7 +47,7 @@ public class Minmax {
         } else { // (* minimizing player *)
             value = Integer.MAX_VALUE;
             for (State state : children) { // true
-                value = Math.min(value, minimax(state, depth + 1));
+                value = Math.min(value, minimax(state, depth + 1, !max));
             }
 
             return node.setVal(value);
@@ -59,14 +59,13 @@ public class Minmax {
         State root = new State(true);
         root.printState();
 
-        int bestOption = minimax(root, 0);
+        int bestOption = minimax(root, 0, true);
 
         while (!root.gameEnd()) {
 
             System.out.println("\n-----------------------\n");
 
             for (int i = 0; i < root.getChildren().size(); i++) {
-                root.printPunkte();
                 System.out.println("bestoption = " + bestOption);
                 if (root.getChildren().get(i).getVal() == bestOption) {
                     System.out.println("Ki spielt Mulde nummer " + (root.getChildren().get(i).getAction() + 1));
@@ -92,7 +91,7 @@ public class Minmax {
 
             waitforInput();
 
-            bestOption = minimax(root, 0);
+            bestOption = minimax(root, 0, true);
 
         }
 

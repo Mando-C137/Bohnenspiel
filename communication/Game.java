@@ -49,7 +49,8 @@ public class Game {
             }
         }
 
-        startGame();
+        this.state = new State(true);
+        play();
 
     }
 
@@ -66,12 +67,6 @@ public class Game {
         } else if (state.equals("0")) {
             System.out.println("error (join game)");
         }
-
-    }
-
-    private void startGame() {
-        this.state = new State(true);
-        play();
 
     }
 
@@ -96,30 +91,32 @@ public class Game {
             if (stateID != 2 && (inRange(moveState) || moveState == -1)) {
                 if (moveState != -1) {
                     int selectedField = moveState - 1;
+
                     state = State.action(state, selectedField);
                     System.out.println("Gegner waehlte: " + moveState);
                     state.printState();
                 }
                 // calculate fieldID
                 int selectField = -1;
-                int bestOption = Minmax.minimax(state, 0);
+
+                int bestOption = Minmax.minimax(state, 0, true);
                 for (int i = 0; i < state.getChildren().size(); i++) {
-                    state.printPunkte();
+
                     if (state.getChildren().get(i).getVal() == bestOption) {
                         selectField = state.getChildren().get(i).getAction();
                         System.out.println("KI spielt Mulde nummer " + (state.getChildren().get(i).getAction() + 1));
                         state = State.action(state, state.getChildren().get(i).getAction());
+                        state.printState();
                         break;
                     }
                 }
-
-                state.printState();
 
                 if (selectField == -1) {
                     System.out.println("kein play gefunden");
                     selectField = state.firstAction();
                     System.out.println("Daher: KI spielt Mulde nummer " + (selectField + 1));
                     state = State.action(state, selectField);
+                    state.printState();
                 }
 
                 System.out.println(selectField + 1);
@@ -179,8 +176,10 @@ public class Game {
 
         Game game = new Game();
 
-        game.createGame();
-        // game.joinGame("259");
+        // game.createGame();
+        game.joinGame("433");
 
     }
+
+    // wichtig nach action muss noch gegugt werden ob fertig ist
 }

@@ -81,7 +81,7 @@ public class API {
                 }
                 // calculate fieldID
                 int selectField = 0;
-                int bestOption = Minmax.minimax(state, 0);
+                int bestOption = Minmax.minimax(state, 0, true);
                 for (int i = 0; i < state.getChildren().size(); i++) {
                     if (state.getChildren().get(i).getVal() == bestOption) {
                         selectField = state.getChildren().get(i).getAction();
