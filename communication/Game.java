@@ -6,7 +6,6 @@ import java.net.URI;
 
 import domain.Minmax;
 import domain.State;
-import view.Frame;
 
 public class Game {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
@@ -17,7 +16,6 @@ public class Game {
     private State state;
 
     private boolean creator;
-    private Frame gui;
 
     public Game() {
 
@@ -118,6 +116,10 @@ public class Game {
 
                 state.printState();
 
+                if (selectField == 0) {
+                    selectField = state.firstAction();
+                }
+
                 sendMove(selectField + 1);
             } else if (moveState == -2 || stateID == 2) {
                 System.out.println("GAME Finished");
@@ -164,14 +166,6 @@ public class Game {
         } else {
             return answer >= 7 && answer <= 12;
         }
-    }
-
-    public void setGui(Frame frame) {
-        this.gui = frame;
-    }
-
-    void MVCnotify() {
-        gui.renew();
     }
 
     public State getState() {
