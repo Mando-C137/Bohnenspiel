@@ -9,7 +9,7 @@ import domain.State;
 
 public class Game {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "schlecht";
+    static String name = "Tiefe 4";
 
     private String gameID;
 
@@ -70,9 +70,7 @@ public class Game {
     }
 
     private void startGame() {
-
         this.state = new State(true);
-
         play();
 
     }
@@ -89,12 +87,12 @@ public class Game {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-
                 e.printStackTrace();
             }
 
             int moveState = Integer.parseInt(load(checkURL));
             int stateID = Integer.parseInt(load(stateIdURL));
+
             if (stateID != 2 && (inRange(moveState) || moveState == -1)) {
                 if (moveState != -1) {
                     int selectedField = moveState - 1;
@@ -103,7 +101,7 @@ public class Game {
                     state.printState();
                 }
                 // calculate fieldID
-                int selectField = 0;
+                int selectField = -1;
                 int bestOption = Minmax.minimax(state, 0);
                 for (int i = 0; i < state.getChildren().size(); i++) {
                     if (state.getChildren().get(i).getVal() == bestOption) {
@@ -116,10 +114,14 @@ public class Game {
 
                 state.printState();
 
-                if (selectField == 0) {
+                if (selectField == -1) {
+                    System.out.println("kein play gefunden");
                     selectField = state.firstAction();
+                    System.out.println("Daher: KI spielt Mulde nummer " + (selectField + 1));
+                    state = State.action(state, selectField);
                 }
 
+                System.out.println(selectField + 1);
                 sendMove(selectField + 1);
             } else if (moveState == -2 || stateID == 2) {
                 System.out.println("GAME Finished");
@@ -176,8 +178,8 @@ public class Game {
 
         Game game = new Game();
 
-        // game.createGame();
-        game.joinGame("259");
+        game.createGame();
+        // game.joinGame("259");
 
     }
 }
