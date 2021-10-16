@@ -51,14 +51,14 @@ public class State {
      */
     public int maxEvalFunction() {
 
-        if (this.myPoints > 36) {
-            return Integer.MAX_VALUE;
-        } else if (this.oppPoints > 36) {
-            return Integer.MIN_VALUE;
-        }
-        if (this.myPoints == this.oppPoints && this.myPoints == 36) {
-            return 0;
-        }
+        // if (this.myPoints > 36) {
+        // return Integer.MAX_VALUE;
+        // } else if (this.oppPoints > 36) {
+        // return Integer.MIN_VALUE;
+        // }
+        // if (this.myPoints == this.oppPoints && this.myPoints == 36) {
+        // return 0;
+        // }
 
         return this.myPoints - this.oppPoints;
     }
@@ -258,6 +258,14 @@ public class State {
 
         System.out
                 .println("KI hat" + this.myPoints + " Punkte und Gegner hat " + this.oppPoints + " Punkte.\nChapeau\n");
+    }
+
+    public int firstAction() {
+        for (int i : possiblePlays()) {
+            return i;
+        }
+
+        return 1;
     }
 
 }

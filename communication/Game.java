@@ -6,22 +6,24 @@ import java.net.URI;
 
 import domain.Minmax;
 import domain.State;
+import view.Frame;
 
 public class Game {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "mirko";
+    static String name = "schlecht";
 
-    String gameID;
+    private String gameID;
 
-    State state;
+    private State state;
 
-    boolean creator;
+    private boolean creator;
+    private Frame gui;
 
-    private Game() {
+    public Game() {
 
     }
 
-    void createGame() {
+    public void createGame() {
 
         this.creator = true;
 
@@ -50,6 +52,22 @@ public class Game {
         }
 
         startGame();
+
+    }
+
+    public void joinGame(String gameID) {
+        this.gameID = gameID;
+        this.state = new State(true);
+
+        String anfrage = server + "/api/joingame/" + gameID + "/" + name;
+        String state = load(anfrage);
+        System.out.println("Join-Game-State: " + state);
+        if (state.equals("1")) {
+            creator = false;
+            play();
+        } else if (state.equals("0")) {
+            System.out.println("error (join game)");
+        }
 
     }
 
@@ -148,11 +166,24 @@ public class Game {
         }
     }
 
+    public void setGui(Frame frame) {
+        this.gui = frame;
+    }
+
+    void MVCnotify() {
+        gui.renew();
+    }
+
+    public State getState() {
+        return this.state;
+    }
+
     public static void main(String[] args) {
 
         Game game = new Game();
 
-        game.createGame();
+        // game.createGame();
+        game.joinGame("259");
 
     }
 }
