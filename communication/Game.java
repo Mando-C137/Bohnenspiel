@@ -9,7 +9,7 @@ import domain.State;
 
 public class Game {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Tiefe 4";
+    static String name = "bad";
 
     private String gameID;
 
@@ -24,6 +24,7 @@ public class Game {
     public void createGame() {
 
         this.creator = true;
+        Minmax.enemy = false;
 
         String anfrage = server + "/api/creategame/" + name;
 
@@ -49,22 +50,23 @@ public class Game {
             }
         }
 
-        this.state = new State(true);
+        this.state = new State();
         play();
 
     }
 
     public void joinGame(String gameID) {
+        Minmax.enemy = true;
         this.gameID = gameID;
-        this.state = new State(true);
+        this.state = new State();
 
         String anfrage = server + "/api/joingame/" + gameID + "/" + name;
-        String state = load(anfrage);
-        System.out.println("Join-Game-State: " + state);
-        if (state.equals("1")) {
+        String res = load(anfrage);
+        System.out.println("Join-Game-State: " + res);
+        if (res.equals("1")) {
             creator = false;
             play();
-        } else if (state.equals("0")) {
+        } else if (res.equals("0")) {
             System.out.println("error (join game)");
         }
 
@@ -99,12 +101,13 @@ public class Game {
                 // calculate fieldID
                 int selectField = -1;
 
+                state.setMyTurn(!Minmax.enemy);
                 int bestOption = Minmax.minimax(state, 0, true);
                 for (int i = 0; i < state.getChildren().size(); i++) {
 
                     if (state.getChildren().get(i).getVal() == bestOption) {
                         selectField = state.getChildren().get(i).getAction();
-                        System.out.println("KI spielt Mulde nummer " + (state.getChildren().get(i).getAction() + 1));
+
                         state = State.action(state, state.getChildren().get(i).getAction());
                         state.printState();
                         break;
@@ -112,14 +115,13 @@ public class Game {
                 }
 
                 if (selectField == -1) {
-                    System.out.println("kein play gefunden");
-                    selectField = state.firstAction();
-                    System.out.println("Daher: KI spielt Mulde nummer " + (selectField + 1));
+                    System.out.println("kein verbessernder play gefunden");
+                    selectField = state.firstAction(!this.creator);
                     state = State.action(state, selectField);
                     state.printState();
                 }
 
-                System.out.println(selectField + 1);
+                System.out.println("ausgewählter Play : " + (selectField + 1));
                 sendMove(selectField + 1);
             } else if (moveState == -2 || stateID == 2) {
                 System.out.println("GAME Finished");
@@ -176,8 +178,8 @@ public class Game {
 
         Game game = new Game();
 
-        // game.createGame();
-        game.joinGame("433");
+        game.createGame();
+        // game.joinGame("630");
 
     }
 

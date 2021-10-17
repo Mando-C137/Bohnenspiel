@@ -14,19 +14,20 @@ public class State {
 
     private int myPoints;
 
-    private int oppPoints;
-
     private boolean myTurn;
+
+    private int oppPoints;
 
     private int[] board = { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 }; // position 1-12
 
     /**
      * Konstruktor standardmäßig
      */
-    public State(boolean MyCreation) {
+    public State() {
+
         this.myPoints = 0;
         this.oppPoints = 0;
-        this.myTurn = MyCreation;
+
         this.children = new LinkedList<State>();
         this.val = 0;
         this.action = -1;
@@ -50,18 +51,23 @@ public class State {
      * 
      * @return
      */
-    public int maxEvalFunction() {
+    public int evaluate(boolean enemy) {
 
-        if (this.myPoints > 36) {
-            return Integer.MAX_VALUE;
-        } else if (this.oppPoints > 36) {
-            return Integer.MIN_VALUE;
-        }
-        if (this.myPoints == this.oppPoints && this.myPoints == 36) {
-            return 0;
+        // if (this.myPoints > 36) {
+        // return Integer.MAX_VALUE;
+        // } else if (this.oppPoints > 36) {
+        // return Integer.MIN_VALUE;
+        // }
+        // if (this.myPoints == this.oppPoints && this.myPoints == 36) {
+        // return 0;
+        // }
+
+        if (!enemy) {
+            return this.myPoints - this.oppPoints;
+        } else {
+            return this.oppPoints - this.myPoints;
         }
 
-        return this.myPoints - this.oppPoints;
     }
 
     /**
@@ -75,8 +81,8 @@ public class State {
         List<Integer> res = new LinkedList<Integer>();
 
         for (int i = 0; i < 6; i++) {
-            if (this.board[this.myTurn ? i : 6 + i] != 0) {
-                res.add(this.myTurn ? i : 6 + i);
+            if (this.board[myTurn ? i : 6 + i] != 0) {
+                res.add(myTurn ? i : 6 + i);
             }
         }
 
@@ -107,6 +113,10 @@ public class State {
 
         State param = (State) o;
 
+        if (this.myTurn != param.myTurn) {
+            return false;
+        }
+
         if (this.oppPoints != param.oppPoints || this.myPoints != param.myPoints) {
             return false;
         }
@@ -133,7 +143,7 @@ public class State {
     public static State action(State copy, int field) {
 
         State s = new State(copy);
-        s.myTurn = !copy.myTurn;
+
         s.action = field;
         int startField = field;
 
@@ -157,16 +167,8 @@ public class State {
             } while (s.board[field] == 2 || s.board[field] == 4 || s.board[field] == 6);
         }
 
+        s.myTurn = !copy.myTurn;
         return s;
-    }
-
-    /**
-     * ob man gerade an einem max oder min Knoten ist.
-     * 
-     * @return
-     */
-    public boolean maximizingPlayer() {
-        return this.myTurn;
     }
 
     /**
@@ -205,15 +207,6 @@ public class State {
     }
 
     /**
-     * setter für die Kinderknoten
-     * 
-     * @param children
-     */
-    public void setChildren(LinkedList<State> children) {
-        this.children = children;
-    }
-
-    /**
      * setter für den value und gibt ihn zurück
      * 
      * @param val
@@ -241,12 +234,16 @@ public class State {
     }
 
     /**
-     * Getter für die Actin ,die dazu hingeführt hat
+     * Getter für die Action ,die dazu hingeführt hat
      * 
      * @return
      */
     public int getAction() {
         return this.action;
+    }
+
+    public boolean maximizingPlayer() {
+        return this.myTurn;
     }
 
     public void printEnd() {
@@ -255,12 +252,16 @@ public class State {
                 .println("KI hat" + this.myPoints + " Punkte und Gegner hat " + this.oppPoints + " Punkte.\nChapeau\n");
     }
 
-    public int firstAction() {
+    public int firstAction(boolean max) {
         for (int i : possiblePlays()) {
             return i;
         }
 
         return 1;
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
     }
 
 }

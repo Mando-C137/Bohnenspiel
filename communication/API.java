@@ -57,7 +57,7 @@ public class API {
         String checkURL = server + "/api/check/" + gameID + "/" + name;
         String statesMsgURL = server + "/api/statemsg/" + gameID;
         String stateIdURL = server + "/api/state/" + gameID;
-        state = new State(!MyCreation);
+        state = new State();
         int start, end;
         if (!MyCreation) {
             start = 7;
