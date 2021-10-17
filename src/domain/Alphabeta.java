@@ -5,7 +5,7 @@ public class Alphabeta {
     /**
      * MinMaxBaumTiefe
      */
-    private static int FAVOURED_DEPTH = 9;
+    private static int FAVOURED_DEPTH = 11;
 
     public static boolean enemy;
 
