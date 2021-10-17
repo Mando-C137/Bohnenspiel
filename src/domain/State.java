@@ -1,4 +1,4 @@
-package domain;
+package src.domain;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -62,10 +62,61 @@ public class State {
         // return 0;
         // }
 
+        // das oben klappt schlechter als das unten
+
+        // TODO checken ob der Gegner uns jetzt aushungern lassen kann oder der Gegner
+        // ausgehungert ist.
+
+        if (ausgehungert(enemy)) {
+            return aushungern(enemy);
+        }
+
         if (!enemy) {
             return this.myPoints - this.oppPoints;
         } else {
             return this.oppPoints - this.myPoints;
+        }
+
+    }
+
+    private boolean ausgehungert(boolean enemy) {
+        if (enemy) {
+            for (int i = 0; i < 6; i++) {
+                if (this.board[i] != 0) {
+                    return false;
+                }
+            }
+        }
+
+        else {
+            for (int i = 6; i < 12; i++) {
+                if (this.board[i] != 0) {
+                    return false;
+                }
+            }
+        }
+
+        System.out.println("aushungern lassen");
+        return true;
+    }
+
+    private int aushungern(boolean enemy) {
+
+        int sum = 0;
+        if (enemy) {
+            for (int i = 0; i < 6; i++) {
+                sum += this.board[i];
+            }
+
+            return (this.oppPoints + sum > this.myPoints) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+
+        } else {
+            for (int i = 6; i < 12; i++) {
+                if (this.board[i] != 0) {
+                    sum += this.board[i];
+                }
+            }
+            return (this.myPoints + sum > this.oppPoints) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
         }
 
     }

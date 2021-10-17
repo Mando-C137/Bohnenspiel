@@ -1,15 +1,14 @@
-package communication;
+package src.communication;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
 
-import domain.Minmax;
-import domain.State;
+import src.domain.*;
 
 public class Game {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Tiefe4";
+    static String name = "Tiefe 4 minmax";
 
     private String gameID;
 
@@ -179,7 +178,7 @@ public class Game {
         Game game = new Game();
 
         // game.createGame();
-        game.joinGame("636");
+        game.joinGame("690");
 
     }
 
