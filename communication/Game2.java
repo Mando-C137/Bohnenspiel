@@ -9,7 +9,7 @@ import domain.State;
 
 public class Game2 {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Tiefe4";
+    static String name = "Tiefe9";
 
     private String gameID;
 
@@ -17,12 +17,12 @@ public class Game2 {
 
     private boolean creator;
 
-    public Game() {
+    public Game2() {
 
     }
 
     public void createGame() {
-
+    	
         this.creator = true;
         Alphabeta.enemy = false;
 
@@ -178,8 +178,8 @@ public class Game2 {
 
         Game game = new Game();
 
-        // game.createGame();
-        game.joinGame("636");
+        game.createGame();
+        //game.joinGame("636");
 
     }
 

@@ -5,11 +5,13 @@ public class Alphabeta {
     /**
      * MinMaxBaumTiefe
      */
-    private static int FAVOURED_DEPTH = 4;
+    private static int FAVOURED_DEPTH = 9;
 
     public static boolean enemy;
 
     public static int alphabeta(State node, int depth, int alpha, int beta, boolean max) {
+	
+    	int value = -1;
 
         // wenn man an einem blattknoten ist oder das spiel fertig ist
         // base case
@@ -42,7 +44,7 @@ public class Alphabeta {
         } else { // (* minimizing player *)
             value = Integer.MAX_VALUE;
             for (State state : node.getChildren()) { // true
-                value = Math.min(value, minimax(state, depth + 1, alpha, beta, true));
+                value = Math.min(value, alphabeta(state, depth + 1, alpha, beta, true));
                 if(value <= alpha) {
                 	break;
                 }
