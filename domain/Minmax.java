@@ -5,7 +5,7 @@ public class Minmax {
     /**
      * MinMaxBaumTiefe
      */
-    private static int FAVOURED_DEPTH = 8;
+    private static int FAVOURED_DEPTH = 4;
 
     public static boolean enemy;
 
