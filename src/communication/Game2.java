@@ -8,7 +8,7 @@ import src.domain.*;
 
 public class Game2 {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Tiefe 13 alpha";
+    static String name = "Tiefe 13 Alpha";
 
     private String gameID;
 
@@ -102,6 +102,9 @@ public class Game2 {
 
                 state.setMyTurn(!Alphabeta.enemy);
                 int bestOption = Alphabeta.alphabeta(state, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                if (bestOption == Integer.MAX_VALUE) {
+                    System.out.println("aushungern");
+                }
                 for (int i = 0; i < state.getChildren().size(); i++) {
 
                     if (state.getChildren().get(i).getVal() == bestOption) {
@@ -178,7 +181,7 @@ public class Game2 {
         Game2 game = new Game2();
 
         game.createGame();
-        // game.joinGame("636");
+        // game.joinGame("742");
 
     }
 

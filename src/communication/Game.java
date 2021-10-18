@@ -178,7 +178,7 @@ public class Game {
         Game game = new Game();
 
         // game.createGame();
-        game.joinGame("690");
+        game.joinGame("746");
 
     }
 

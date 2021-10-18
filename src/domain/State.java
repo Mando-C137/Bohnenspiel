@@ -58,9 +58,6 @@ public class State {
         // } else if (this.oppPoints > 36) {
         // return Integer.MIN_VALUE;
         // }
-        // if (this.myPoints == this.oppPoints && this.myPoints == 36) {
-        // return 0;
-        // }
 
         // das oben klappt schlechter als das unten
 
@@ -72,8 +69,14 @@ public class State {
         }
 
         if (!enemy) {
+            if (this.myPoints > 36) {
+                return this.myPoints - this.oppPoints + 72;
+            }
             return this.myPoints - this.oppPoints;
         } else {
+            if (this.oppPoints > 36) {
+                return this.oppPoints - this.myPoints + 72;
+            }
             return this.oppPoints - this.myPoints;
         }
 
@@ -96,7 +99,6 @@ public class State {
             }
         }
 
-        System.out.println("aushungern lassen");
         return true;
     }
 
@@ -108,7 +110,7 @@ public class State {
                 sum += this.board[i];
             }
 
-            return (this.oppPoints + sum > this.myPoints) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            return (this.oppPoints + sum > this.myPoints) ? 72 + this.oppPoints + sum - this.myPoints : -72;
 
         } else {
             for (int i = 6; i < 12; i++) {
@@ -116,7 +118,7 @@ public class State {
                     sum += this.board[i];
                 }
             }
-            return (this.myPoints + sum > this.oppPoints) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            return (this.myPoints + sum > this.oppPoints) ? 72 + this.myPoints + sum - this.oppPoints : -72;
         }
 
     }
