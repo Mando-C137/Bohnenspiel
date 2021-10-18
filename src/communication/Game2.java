@@ -8,7 +8,7 @@ import src.domain.*;
 
 public class Game2 {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Tiefe 13 Alpha";
+    static String name = "Tiefe 13 Alphab";
 
     private String gameID;
 
@@ -179,9 +179,9 @@ public class Game2 {
     public static void main(String[] args) {
 
         Game2 game = new Game2();
-
-        game.createGame();
-        // game.joinGame("742");
+        System.out.println("joine 755");
+        // game.createGame();
+        game.joinGame("755");
 
     }
 

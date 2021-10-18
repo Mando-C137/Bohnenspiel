@@ -64,21 +64,27 @@ public class State {
         // TODO checken ob der Gegner uns jetzt aushungern lassen kann oder der Gegner
         // ausgehungert ist.
 
-        if (ausgehungert(enemy)) {
-            return aushungern(enemy);
-        }
-
+        int best;
         if (!enemy) {
             if (this.myPoints > 36) {
-                return this.myPoints - this.oppPoints + 72;
+                best = this.myPoints - this.oppPoints + 72;
+            } else {
+                best = this.myPoints - this.oppPoints;
             }
-            return this.myPoints - this.oppPoints;
         } else {
             if (this.oppPoints > 36) {
-                return this.oppPoints - this.myPoints + 72;
+                best = this.oppPoints - this.myPoints + 72;
+            } else {
+                best = this.oppPoints - this.myPoints;
             }
-            return this.oppPoints - this.myPoints;
         }
+
+        if (ausgehungert(enemy)) {
+            int hunger = aushungern(enemy);
+            best = (hunger > best) ? hunger : best;
+        }
+
+        return best;
 
     }
 
