@@ -53,35 +53,18 @@ public class State {
      */
     public int evaluate(boolean enemy) {
 
-        // if (this.myPoints > 36) {
-        // return Integer.MAX_VALUE;
-        // } else if (this.oppPoints > 36) {
-        // return Integer.MIN_VALUE;
-        // }
-
-        // das oben klappt schlechter als das unten
-
         // TODO checken ob der Gegner uns jetzt aushungern lassen kann oder der Gegner
         // ausgehungert ist.
 
         int best;
         if (!enemy) {
-            if (this.myPoints > 36) {
-                best = this.myPoints - this.oppPoints + 72;
-            } else {
-                best = this.myPoints - this.oppPoints;
-            }
+            best = this.myPoints - this.oppPoints;
         } else {
-            if (this.oppPoints > 36) {
-                best = this.oppPoints - this.myPoints + 72;
-            } else {
-                best = this.oppPoints - this.myPoints;
-            }
+            best = this.oppPoints - this.myPoints;
         }
 
-        if (ausgehungert(enemy)) {
-            int hunger = aushungern(enemy);
-            best = (hunger > best) ? hunger : best;
+        if (!this.myTurn && ausgehungert(enemy)) {
+            return aushungern(enemy);
         }
 
         return best;
@@ -116,7 +99,9 @@ public class State {
                 sum += this.board[i];
             }
 
-            return (this.oppPoints + sum > this.myPoints) ? 72 + this.oppPoints + sum - this.myPoints : -72;
+            // return (this.oppPoints + sum > this.myPoints) ? 72 + this.oppPoints + sum -
+            // this.myPoints : -72;
+            return (this.oppPoints + sum > this.myPoints) ? 72 : -72;
 
         } else {
             for (int i = 6; i < 12; i++) {
@@ -124,7 +109,7 @@ public class State {
                     sum += this.board[i];
                 }
             }
-            return (this.myPoints + sum > this.oppPoints) ? 72 + this.myPoints + sum - this.oppPoints : -72;
+            return (this.myPoints + sum > this.oppPoints) ? 72 : -72;
         }
 
     }
@@ -299,10 +284,6 @@ public class State {
      */
     public int getAction() {
         return this.action;
-    }
-
-    public boolean maximizingPlayer() {
-        return this.myTurn;
     }
 
     public void printEnd() {

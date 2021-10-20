@@ -181,7 +181,7 @@ public class Game2 {
         Game2 game = new Game2();
         System.out.println("joine 755");
         // game.createGame();
-        game.joinGame("755");
+        game.joinGame("1427");
 
     }
 
