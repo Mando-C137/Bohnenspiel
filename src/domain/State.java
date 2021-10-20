@@ -56,17 +56,24 @@ public class State {
         // TODO checken ob der Gegner uns jetzt aushungern lassen kann oder der Gegner
         // ausgehungert ist.
 
-        int best;
-        if (!enemy) {
-            best = this.myPoints - this.oppPoints;
-        } else {
-            best = this.oppPoints - this.myPoints;
-        }
-
+        int best = -72;
         if (!this.myTurn && ausgehungert(enemy)) {
-            return aushungern(enemy);
+            best = aushungern(enemy);
         }
 
+        if (!enemy) {
+            if (this.myPoints > 36) {
+                best = Math.max(this.myPoints - this.oppPoints + 72, best);
+            } else {
+                best = Math.max(best, this.myPoints - this.oppPoints);
+            }
+        } else {
+            if (this.oppPoints > 36) {
+                best = Math.max(best, this.oppPoints - this.myPoints + 72);
+            } else {
+                best = Math.max(best, this.oppPoints - this.myPoints);
+            }
+        }
         return best;
 
     }
@@ -101,7 +108,7 @@ public class State {
 
             // return (this.oppPoints + sum > this.myPoints) ? 72 + this.oppPoints + sum -
             // this.myPoints : -72;
-            return (this.oppPoints + sum > this.myPoints) ? 72 : -72;
+            return (this.oppPoints + sum > this.myPoints) ? 72 + this.oppPoints + sum - this.myPoints : -72;
 
         } else {
             for (int i = 6; i < 12; i++) {
@@ -109,7 +116,7 @@ public class State {
                     sum += this.board[i];
                 }
             }
-            return (this.myPoints + sum > this.oppPoints) ? 72 : -72;
+            return (this.myPoints + sum > this.oppPoints) ? 72 + this.myPoints + sum - this.oppPoints : -72;
         }
 
     }

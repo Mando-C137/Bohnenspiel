@@ -16,9 +16,7 @@ public class Alphabeta {
         // wenn man an einem blattknoten ist oder das spiel fertig ist
         // base case
         if (depth == FAVOURED_DEPTH || node.gameEnd()) {
-
             return node.setVal(node.evaluate(enemy));
-
         }
 
         // mögliche plays rausfinden und die daraus resultierenden zustände speichern
