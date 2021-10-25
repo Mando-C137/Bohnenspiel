@@ -8,7 +8,7 @@ import src.domain.*;
 
 public class Game2 {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Morty";
+    static String name = "bitte beitreten";
 
     private String gameID;
 
@@ -43,7 +43,7 @@ public class Game2 {
             }
 
             try {
-                Thread.sleep(300);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -81,7 +81,7 @@ public class Game2 {
             System.out.println();
 
             try {
-                Thread.sleep(300);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -173,14 +173,6 @@ public class Game2 {
 
     public State getState() {
         return this.state;
-    }
-
-    public static void main(String[] args) {
-
-        Game2 game = new Game2();
-        // game.createGame();
-        game.joinGame("3247");
-
     }
 
     // wichtig nach action muss noch gegugt werden ob fertig ist

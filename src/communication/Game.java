@@ -172,14 +172,4 @@ public class Game {
         return this.state;
     }
 
-    public static void main(String[] args) {
-
-        Game game = new Game();
-
-        game.createGame();
-        // game.joinGame("746");
-
-    }
-
-    // wichtig nach action muss noch gegugt werden ob fertig ist
 }
