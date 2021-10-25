@@ -8,7 +8,7 @@ import src.domain.*;
 
 public class Game {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Tiefe 4 minmax";
+    static String name = "T4";
 
     private String gameID;
 
@@ -43,7 +43,7 @@ public class Game {
             }
 
             try {
-                Thread.sleep(3000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -78,10 +78,9 @@ public class Game {
         String stateIdURL = server + "/api/state/" + gameID;
 
         while (true) {
-            System.out.println();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

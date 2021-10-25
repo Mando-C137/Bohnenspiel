@@ -8,15 +8,13 @@ import src.domain.*;
 
 public class Game2 {
     static String server = "http://bohnenspiel.informatik.uni-mannheim.de";
-    static String name = "Rick";
+    static String name = "Morty";
 
     private String gameID;
 
     private State state;
 
     private boolean creator;
-
-    static long dauer;
 
     public Game2() {
 
@@ -45,7 +43,7 @@ public class Game2 {
             }
 
             try {
-                Thread.sleep(3000);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -75,8 +73,6 @@ public class Game2 {
 
     private void play() {
 
-        dauer = 0;
-
         String checkURL = server + "/api/check/" + gameID + "/" + name;
         String statesMsgURL = server + "/api/statemsg/" + gameID;
         String stateIdURL = server + "/api/state/" + gameID;
@@ -85,7 +81,7 @@ public class Game2 {
             System.out.println();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -106,17 +102,8 @@ public class Game2 {
 
                 state.setMyTurn(!Alphabeta.enemy);
 
-                long timebefore = System.currentTimeMillis();
-
                 int bestOption = Alphabeta.alphabeta(state, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
 
-                long timeAfter = System.currentTimeMillis() - timebefore;
-
-                dauer += timeAfter;
-
-                if (bestOption == Integer.MAX_VALUE) {
-                    System.out.println("aushungern");
-                }
                 for (int i = 0; i < state.getChildren().size(); i++) {
 
                     if (state.getChildren().get(i).getVal() == bestOption) {
@@ -141,7 +128,6 @@ public class Game2 {
                 System.out.println("GAME Finished");
                 checkURL = server + "/api/statemsg/" + gameID;
                 System.out.println(load(checkURL));
-                System.out.println("Die Dauer der Plays war " + dauer);
                 return;
             } else {
                 System.out.println("- " + moveState + "\t\t" + load(statesMsgURL));
@@ -193,7 +179,7 @@ public class Game2 {
 
         Game2 game = new Game2();
         // game.createGame();
-        game.joinGame("1505");
+        game.joinGame("3247");
 
     }
 
